@@ -4916,8 +4916,8 @@
           "description": "Message describing what the tool will do"
         },
         "toolInput": {
-          "type": "string",
-          "description": "Raw tool input"
+          "$ref": "#/$defs/ToolInput",
+          "description": "Final tool input.\n\nReferenced input is mutable until the tool call leaves\n`pending-confirmation`. When the client confirms with `editedToolInput`,\nthe host MUST replace the resource contents before echoing the accepted\nconfirmation action. Clients MUST NOT cache tool input across confirmation."
         }
       },
       "required": [
@@ -5003,7 +5003,7 @@
         },
         "partialInput": {
           "type": "string",
-          "description": "Partial parameters accumulated so far"
+          "description": "Partial parameters accumulated from tool-call deltas."
         },
         "invocationMessage": {
           "$ref": "#/$defs/StringOrMarkdown",
@@ -5051,8 +5051,8 @@
           "description": "Message describing what the tool will do"
         },
         "toolInput": {
-          "type": "string",
-          "description": "Raw tool input"
+          "$ref": "#/$defs/ToolInput",
+          "description": "Final tool input.\n\nReferenced input is mutable until the tool call leaves\n`pending-confirmation`. When the client confirms with `editedToolInput`,\nthe host MUST replace the resource contents before echoing the accepted\nconfirmation action. Clients MUST NOT cache tool input across confirmation."
         },
         "status": {
           "const": "pending-confirmation"
@@ -5151,8 +5151,8 @@
           "description": "Message describing what the tool will do"
         },
         "toolInput": {
-          "type": "string",
-          "description": "Raw tool input"
+          "$ref": "#/$defs/ToolInput",
+          "description": "Final tool input.\n\nReferenced input is mutable until the tool call leaves\n`pending-confirmation`. When the client confirms with `editedToolInput`,\nthe host MUST replace the resource contents before echoing the accepted\nconfirmation action. Clients MUST NOT cache tool input across confirmation."
         },
         "confirmed": {
           "$ref": "#/$defs/ToolCallConfirmationReason",
@@ -5216,8 +5216,8 @@
           "description": "Message describing what the tool will do"
         },
         "toolInput": {
-          "type": "string",
-          "description": "Raw tool input"
+          "$ref": "#/$defs/ToolInput",
+          "description": "Final tool input.\n\nReferenced input is mutable until the tool call leaves\n`pending-confirmation`. When the client confirms with `editedToolInput`,\nthe host MUST replace the resource contents before echoing the accepted\nconfirmation action. Clients MUST NOT cache tool input across confirmation."
         },
         "confirmed": {
           "$ref": "#/$defs/ToolCallConfirmationReason",
@@ -5287,8 +5287,8 @@
           "description": "Message describing what the tool will do"
         },
         "toolInput": {
-          "type": "string",
-          "description": "Raw tool input"
+          "$ref": "#/$defs/ToolInput",
+          "description": "Final tool input.\n\nReferenced input is mutable until the tool call leaves\n`pending-confirmation`. When the client confirms with `editedToolInput`,\nthe host MUST replace the resource contents before echoing the accepted\nconfirmation action. Clients MUST NOT cache tool input across confirmation."
         },
         "success": {
           "type": "boolean",
@@ -5382,8 +5382,8 @@
           "description": "Message describing what the tool will do"
         },
         "toolInput": {
-          "type": "string",
-          "description": "Raw tool input"
+          "$ref": "#/$defs/ToolInput",
+          "description": "Final tool input.\n\nReferenced input is mutable until the tool call leaves\n`pending-confirmation`. When the client confirms with `editedToolInput`,\nthe host MUST replace the resource contents before echoing the accepted\nconfirmation action. Clients MUST NOT cache tool input across confirmation."
         },
         "success": {
           "type": "boolean",
@@ -5477,8 +5477,8 @@
           "description": "Message describing what the tool will do"
         },
         "toolInput": {
-          "type": "string",
-          "description": "Raw tool input"
+          "$ref": "#/$defs/ToolInput",
+          "description": "Final tool input.\n\nReferenced input is mutable until the tool call leaves\n`pending-confirmation`. When the client confirms with `editedToolInput`,\nthe host MUST replace the resource contents before echoing the accepted\nconfirmation action. Clients MUST NOT cache tool input across confirmation."
         },
         "status": {
           "const": "cancelled"
@@ -7071,7 +7071,7 @@
         },
         "content": {
           "type": "string",
-          "description": "Partial parameter content to append"
+          "description": "Partial parameter content to append, if provided by the host."
         },
         "invocationMessage": {
           "$ref": "#/$defs/StringOrMarkdown",
@@ -7081,8 +7081,7 @@
       "required": [
         "turnId",
         "toolCallId",
-        "type",
-        "content"
+        "type"
       ]
     },
     "ChatToolCallReadyAction": {
@@ -7118,8 +7117,8 @@
           "description": "Message describing what the tool will do or what confirmation is needed"
         },
         "toolInput": {
-          "type": "string",
-          "description": "Raw tool input"
+          "$ref": "#/$defs/ToolInput",
+          "description": "Final tool input"
         },
         "confirmationTitle": {
           "$ref": "#/$defs/StringOrMarkdown",
@@ -7196,7 +7195,7 @@
         },
         "editedToolInput": {
           "type": "string",
-          "description": "Edited tool input parameters, if the client modified them before confirming"
+          "description": "Edited tool input parameters, if the client modified them before confirming.\n\nFor inline `toolInput`, the reducer replaces the state value directly.\nFor referenced input, the host MUST replace the resource contents before\nechoing the accepted action."
         },
         "selectedOptionId": {
           "type": "string",
@@ -9153,6 +9152,17 @@
           "$ref": "#/$defs/ToolCallMcpContributor"
         }
       ]
+    },
+    "ToolInput": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/ContentRef"
+        }
+      ],
+      "description": "Tool input represented inline or by reference."
     },
     "ToolResultContent": {
       "oneOf": [

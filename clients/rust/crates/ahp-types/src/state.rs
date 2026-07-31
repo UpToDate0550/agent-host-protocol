@@ -2361,7 +2361,7 @@ pub struct ToolCallStreamingState {
     /// with the {@link contributor} to serve MCP Apps.
     #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
     pub meta: Option<JsonObject>,
-    /// Partial parameters accumulated so far
+    /// Partial parameters accumulated from tool-call deltas.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub partial_input: Option<String>,
     /// Progress message shown while parameters are streaming
@@ -2395,9 +2395,14 @@ pub struct ToolCallPendingConfirmationState {
     pub meta: Option<JsonObject>,
     /// Message describing what the tool will do
     pub invocation_message: StringOrMarkdown,
-    /// Raw tool input
+    /// Final tool input.
+    ///
+    /// Referenced input is mutable until the tool call leaves
+    /// `pending-confirmation`. When the client confirms with `editedToolInput`,
+    /// the host MUST replace the resource contents before echoing the accepted
+    /// confirmation action. Clients MUST NOT cache tool input across confirmation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub tool_input: Option<String>,
+    pub tool_input: Option<ToolInput>,
     /// Short title for the confirmation prompt (e.g. `"Run in terminal"`, `"Write file"`)
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub confirmation_title: Option<StringOrMarkdown>,
@@ -2443,9 +2448,14 @@ pub struct ToolCallRunningState {
     pub meta: Option<JsonObject>,
     /// Message describing what the tool will do
     pub invocation_message: StringOrMarkdown,
-    /// Raw tool input
+    /// Final tool input.
+    ///
+    /// Referenced input is mutable until the tool call leaves
+    /// `pending-confirmation`. When the client confirms with `editedToolInput`,
+    /// the host MUST replace the resource contents before echoing the accepted
+    /// confirmation action. Clients MUST NOT cache tool input across confirmation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub tool_input: Option<String>,
+    pub tool_input: Option<ToolInput>,
     /// How the tool was confirmed for execution
     pub confirmed: ToolCallConfirmationReason,
     /// The confirmation option the user selected, if confirmation options were provided
@@ -2510,9 +2520,14 @@ pub struct ToolCallAuthRequiredState {
     pub meta: Option<JsonObject>,
     /// Message describing what the tool will do
     pub invocation_message: StringOrMarkdown,
-    /// Raw tool input
+    /// Final tool input.
+    ///
+    /// Referenced input is mutable until the tool call leaves
+    /// `pending-confirmation`. When the client confirms with `editedToolInput`,
+    /// the host MUST replace the resource contents before echoing the accepted
+    /// confirmation action. Clients MUST NOT cache tool input across confirmation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub tool_input: Option<String>,
+    pub tool_input: Option<ToolInput>,
     /// How the tool was confirmed for execution
     pub confirmed: ToolCallConfirmationReason,
     /// The confirmation option the user selected, if confirmation options were provided
@@ -2551,9 +2566,14 @@ pub struct ToolCallPendingResultConfirmationState {
     pub meta: Option<JsonObject>,
     /// Message describing what the tool will do
     pub invocation_message: StringOrMarkdown,
-    /// Raw tool input
+    /// Final tool input.
+    ///
+    /// Referenced input is mutable until the tool call leaves
+    /// `pending-confirmation`. When the client confirms with `editedToolInput`,
+    /// the host MUST replace the resource contents before echoing the accepted
+    /// confirmation action. Clients MUST NOT cache tool input across confirmation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub tool_input: Option<String>,
+    pub tool_input: Option<ToolInput>,
     /// Whether the tool succeeded
     pub success: bool,
     /// Past-tense description of what the tool did
@@ -2603,9 +2623,14 @@ pub struct ToolCallCompletedState {
     pub meta: Option<JsonObject>,
     /// Message describing what the tool will do
     pub invocation_message: StringOrMarkdown,
-    /// Raw tool input
+    /// Final tool input.
+    ///
+    /// Referenced input is mutable until the tool call leaves
+    /// `pending-confirmation`. When the client confirms with `editedToolInput`,
+    /// the host MUST replace the resource contents before echoing the accepted
+    /// confirmation action. Clients MUST NOT cache tool input across confirmation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub tool_input: Option<String>,
+    pub tool_input: Option<ToolInput>,
     /// Whether the tool succeeded
     pub success: bool,
     /// Past-tense description of what the tool did
@@ -2655,9 +2680,14 @@ pub struct ToolCallCancelledState {
     pub meta: Option<JsonObject>,
     /// Message describing what the tool will do
     pub invocation_message: StringOrMarkdown,
-    /// Raw tool input
+    /// Final tool input.
+    ///
+    /// Referenced input is mutable until the tool call leaves
+    /// `pending-confirmation`. When the client confirms with `editedToolInput`,
+    /// the host MUST replace the resource contents before echoing the accepted
+    /// confirmation action. Clients MUST NOT cache tool input across confirmation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub tool_input: Option<String>,
+    pub tool_input: Option<ToolInput>,
     /// Why the tool was cancelled
     pub reason: ToolCallCancellationReason,
     /// Optional message explaining the cancellation
@@ -4220,6 +4250,14 @@ pub struct ResourceChange {
     pub r#type: ResourceChangeType,
 }
 
+/// Raw tool input represented inline or by content reference.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ToolInput {
+    Inline(String),
+    ContentRef(ContentRef),
+}
+
 // ─── Discriminated Unions ─────────────────────────────────────────────
 
 /// How a chat came into existence.
@@ -4576,7 +4614,7 @@ pub enum SessionInputRequest {
 }
 
 /// The state payload of a snapshot — root, session, chat, terminal,
-/// changeset, resource-watch, or annotations state.
+/// changeset, resource-watch, annotations, or content state.
 ///
 /// Deserialized by trying session first (has required `lifecycle`), then
 /// chat (has required `turns`), then terminal (has required `content`),

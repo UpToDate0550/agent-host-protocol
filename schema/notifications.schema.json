@@ -3543,7 +3543,7 @@
         "content"
       ]
     },
-    "ResourceReponsePart": {
+    "ResourceResponsePart": {
       "type": "object",
       "description": "A content part that's a reference to large content stored outside the state tree.",
       "properties": {
@@ -5502,7 +5502,7 @@
           "$ref": "#/$defs/MarkdownResponsePart"
         },
         {
-          "$ref": "#/$defs/ResourceReponsePart"
+          "$ref": "#/$defs/ResourceResponsePart"
         },
         {
           "$ref": "#/$defs/ToolCallResponsePart"

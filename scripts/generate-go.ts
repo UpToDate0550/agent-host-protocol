@@ -758,7 +758,7 @@ const STATE_STRUCTS: { name: string; omitDiscriminants?: boolean; goName?: strin
   { name: 'MessageChatAttachment' },
   { name: 'MarkdownResponsePart' },
   { name: 'ContentRef' },
-  { name: 'ResourceReponsePart', goName: 'ResourceResponsePart' },
+  { name: 'ResourceResponsePart' },
   { name: 'ToolCallResponsePart' },
   { name: 'ReasoningResponsePart' },
   { name: 'SystemNotificationResponsePart' },

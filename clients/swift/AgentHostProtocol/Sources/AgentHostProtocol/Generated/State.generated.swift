@@ -2414,7 +2414,7 @@ public struct ContentRef: Codable, Sendable {
     }
 }
 
-public struct ResourceReponsePart: Codable, Sendable {
+public struct ResourceResponsePart: Codable, Sendable {
     /// Content URI
     public var uri: String
     /// Approximate size in bytes
@@ -5330,7 +5330,7 @@ public enum ChatOrigin: Codable, Sendable {
 
 public enum ResponsePart: Codable, Sendable {
     case markdown(MarkdownResponsePart)
-    case contentRef(ResourceReponsePart)
+    case contentRef(ResourceResponsePart)
     case toolCall(ToolCallResponsePart)
     case reasoning(ReasoningResponsePart)
     case systemNotification(SystemNotificationResponsePart)
@@ -5350,7 +5350,7 @@ public enum ResponsePart: Codable, Sendable {
         case "markdown":
             self = .markdown(try MarkdownResponsePart(from: decoder))
         case "contentRef":
-            self = .contentRef(try ResourceReponsePart(from: decoder))
+            self = .contentRef(try ResourceResponsePart(from: decoder))
         case "toolCall":
             self = .toolCall(try ToolCallResponsePart(from: decoder))
         case "reasoning":

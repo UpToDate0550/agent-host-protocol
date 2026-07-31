@@ -881,7 +881,7 @@ export interface MarkdownResponsePart {
  *
  * @category Response Parts
  */
-export interface ResourceReponsePart extends ContentRef {
+export interface ResourceResponsePart extends ContentRef {
   /** Discriminant */
   kind: ResponsePartKind.ContentRef;
 }
@@ -921,7 +921,7 @@ export interface ReasoningResponsePart {
  */
 export type ResponsePart =
   | MarkdownResponsePart
-  | ResourceReponsePart
+  | ResourceResponsePart
   | ToolCallResponsePart
   | ReasoningResponsePart
   | SystemNotificationResponsePart

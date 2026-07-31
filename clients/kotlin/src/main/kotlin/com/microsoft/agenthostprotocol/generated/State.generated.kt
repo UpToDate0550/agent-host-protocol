@@ -2416,7 +2416,7 @@ data class ContentRef(
 )
 
 @Serializable
-data class ResourceReponsePart(
+data class ResourceResponsePart(
     /**
      * Content URI
      */
@@ -4773,7 +4773,7 @@ sealed interface ResponsePart
 @JvmInline
 value class ResponsePartMarkdown(val value: MarkdownResponsePart) : ResponsePart
 @JvmInline
-value class ResponsePartContentRef(val value: ResourceReponsePart) : ResponsePart
+value class ResponsePartContentRef(val value: ResourceResponsePart) : ResponsePart
 @JvmInline
 value class ResponsePartToolCall(val value: ToolCallResponsePart) : ResponsePart
 @JvmInline
@@ -4807,7 +4807,7 @@ internal object ResponsePartSerializer : KSerializer<ResponsePart> {
             ?: return ResponsePartUnknown(obj)
         return when (discriminant) {
             "markdown" -> ResponsePartMarkdown(input.json.decodeFromJsonElement(MarkdownResponsePart.serializer(), element))
-            "contentRef" -> ResponsePartContentRef(input.json.decodeFromJsonElement(ResourceReponsePart.serializer(), element))
+            "contentRef" -> ResponsePartContentRef(input.json.decodeFromJsonElement(ResourceResponsePart.serializer(), element))
             "toolCall" -> ResponsePartToolCall(input.json.decodeFromJsonElement(ToolCallResponsePart.serializer(), element))
             "reasoning" -> ResponsePartReasoning(input.json.decodeFromJsonElement(ReasoningResponsePart.serializer(), element))
             "systemNotification" -> ResponsePartSystemNotification(input.json.decodeFromJsonElement(SystemNotificationResponsePart.serializer(), element))
@@ -4821,7 +4821,7 @@ internal object ResponsePartSerializer : KSerializer<ResponsePart> {
             ?: error("ResponsePart can only be serialized to JSON")
         val element: JsonElement = when (value) {
             is ResponsePartMarkdown -> output.json.encodeToJsonElement(MarkdownResponsePart.serializer(), value.value)
-            is ResponsePartContentRef -> output.json.encodeToJsonElement(ResourceReponsePart.serializer(), value.value)
+            is ResponsePartContentRef -> output.json.encodeToJsonElement(ResourceResponsePart.serializer(), value.value)
             is ResponsePartToolCall -> output.json.encodeToJsonElement(ToolCallResponsePart.serializer(), value.value)
             is ResponsePartReasoning -> output.json.encodeToJsonElement(ReasoningResponsePart.serializer(), value.value)
             is ResponsePartSystemNotification -> output.json.encodeToJsonElement(SystemNotificationResponsePart.serializer(), value.value)

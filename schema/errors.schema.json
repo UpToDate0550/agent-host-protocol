@@ -3028,7 +3028,6 @@
         "id",
         "message",
         "responseParts",
-        "usage",
         "state"
       ]
     },
@@ -3064,8 +3063,7 @@
         "id",
         "startedAt",
         "message",
-        "responseParts",
-        "usage"
+        "responseParts"
       ]
     },
     "MessageOrigin": {
@@ -6928,8 +6926,7 @@
       "required": [
         "channel",
         "action",
-        "serverSeq",
-        "origin"
+        "serverSeq"
       ]
     },
     "StateAction": {
@@ -7844,8 +7841,7 @@
         }
       },
       "required": [
-        "type",
-        "activity"
+        "type"
       ]
     },
     "SessionChangesetsChangedAction": {
@@ -7864,8 +7860,7 @@
         }
       },
       "required": [
-        "type",
-        "changesets"
+        "type"
       ]
     },
     "SessionConfigChangedAction": {
@@ -7904,8 +7899,7 @@
         }
       },
       "required": [
-        "type",
-        "_meta"
+        "type"
       ]
     },
     "ChatTurnStartedAction": {
@@ -8858,8 +8852,7 @@
         }
       },
       "required": [
-        "type",
-        "operations"
+        "type"
       ]
     },
     "ChangesetOperationStatusChangedAction": {

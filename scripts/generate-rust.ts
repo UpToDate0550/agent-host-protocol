@@ -1544,6 +1544,7 @@ function generateSubscribeParamsImplRust(): string {
     pub fn new(channel: impl Into<Uri>) -> Self {
         Self {
             channel: channel.into(),
+            meta: None,
             delivery: None,
             view: None,
         }
@@ -1553,6 +1554,7 @@ function generateSubscribeParamsImplRust(): string {
     pub fn with_delivery(channel: impl Into<Uri>, delivery: SubscriptionDeliveryOptions) -> Self {
         Self {
             channel: channel.into(),
+            meta: None,
             delivery: Some(delivery),
             view: None,
         }
@@ -1562,6 +1564,7 @@ function generateSubscribeParamsImplRust(): string {
     pub fn with_view(channel: impl Into<Uri>, view: SubscribeView) -> Self {
         Self {
             channel: channel.into(),
+            meta: None,
             delivery: None,
             view: Some(view),
         }

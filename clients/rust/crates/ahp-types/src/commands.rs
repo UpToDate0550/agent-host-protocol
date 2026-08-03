@@ -110,6 +110,10 @@ pub enum ResourceWriteMode {
 pub struct InitializeParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Protocol versions the client is willing to speak, ordered from most
     /// preferred to least preferred. Each entry is a [SemVer](https://semver.org)
     /// `MAJOR.MINOR.PATCH` string (e.g. `"0.1.0"`).
@@ -251,6 +255,10 @@ pub struct Implementation {
 pub struct ReconnectParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Client identifier from the original connection
     pub client_id: String,
     /// Last `serverSeq` the client received
@@ -293,6 +301,10 @@ pub struct ReconnectSnapshotResult {
 pub struct SubscribeParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Optional delivery preferences for this subscription.
     ///
     /// Servers MAY use these preferences to buffer and coalesce high-frequency
@@ -399,6 +411,10 @@ pub struct SessionForkSource {
 pub struct CreateSessionParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Agent provider ID
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub provider: Option<String>,
@@ -457,6 +473,10 @@ pub struct CreateSessionParams {
 pub struct DisposeSessionParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
 }
 
 /// Copies source history through a completed turn into the new chat.
@@ -502,6 +522,10 @@ pub struct SideChatSource {
 pub struct CreateChatParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Chat URI (client-chosen, e.g. `ahp-chat:/<uuid>`).
     pub chat: Uri,
     /// Optional initial message for the new chat.
@@ -541,6 +565,10 @@ pub struct CreateChatParams {
 pub struct DisposeChatParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
 }
 
 /// Returns a list of session summaries. Used to populate session lists and sidebars.
@@ -560,6 +588,10 @@ pub struct DisposeChatParams {
 pub struct ListSessionsParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Maximum number of entries to return in this page. The server SHOULD respect
     /// this bound but MAY return fewer entries and MAY impose its own upper cap.
     /// Omit to let the server choose the page size.
@@ -605,6 +637,10 @@ pub struct ListSessionsResult {
 pub struct ResourceReadParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Content URI from a `ContentRef`
     pub uri: String,
     /// Preferred encoding for the returned data (default: server-chosen)
@@ -648,6 +684,10 @@ pub struct ResourceReadResult {
 pub struct ResourceWriteParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Target file URI on the server filesystem
     pub uri: Uri,
     /// Content encoded as a string
@@ -705,6 +745,10 @@ pub struct ResourceWriteResult {}
 pub struct ResourceListParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Directory URI on the server filesystem
     pub uri: Uri,
 }
@@ -739,6 +783,10 @@ pub struct DirectoryEntry {
 pub struct ResourceCopyParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Source URI to copy from
     pub source: Uri,
     /// Destination URI to copy to
@@ -765,6 +813,10 @@ pub struct ResourceCopyResult {}
 pub struct ResourceDeleteParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// URI of the resource to delete
     pub uri: Uri,
     /// If `true` and the target is a directory, delete it and all its contents
@@ -792,6 +844,10 @@ pub struct ResourceDeleteResult {}
 pub struct ResourceMoveParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Source URI to move from
     pub source: Uri,
     /// Destination URI to move to
@@ -825,6 +881,10 @@ pub struct ResourceMoveResult {}
 pub struct ResourceResolveParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// URI to resolve
     pub uri: Uri,
     /// When `true` (default), follow symlinks and report the metadata of the
@@ -878,6 +938,10 @@ pub struct ResourceResolveResult {
 pub struct ResourceMkdirParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Directory URI to create (parents created as needed).
     pub uri: Uri,
 }
@@ -915,6 +979,10 @@ pub struct ResourceMkdirResult {}
 pub struct ResourceRequestParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Resource URI being requested. Typically a `file:` URI on the receiver's
     /// filesystem, but any URI scheme that the receiver mediates access to is
     /// allowed.
@@ -954,6 +1022,10 @@ pub struct ResourceRequestResult {}
 pub struct CreateResourceWatchParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// URI to watch.
     pub uri: Uri,
     /// If `true`, the receiver MUST report changes for descendants of `uri`.
@@ -997,6 +1069,10 @@ pub struct CreateResourceWatchResult {
 pub struct FetchTurnsParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Opaque cursor from `ChatState.turnsNextCursor`.
     ///
     /// The host MUST reject unrecognised cursors with `InvalidParams`. Omit only
@@ -1055,6 +1131,10 @@ pub struct DispatchActionParams {
 pub struct AuthenticateParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// The protected resource identifier. MUST match a `resource` value the
     /// server has advertised — via `ProtectedResourceMetadata` in
     /// `AgentInfo.protectedResources`, or via a live
@@ -1091,6 +1171,10 @@ pub struct AuthenticateResult {}
 pub struct CreateTerminalParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Initial owner of the terminal
     pub claim: TerminalClaim,
     /// Human-readable terminal name
@@ -1116,6 +1200,10 @@ pub struct CreateTerminalParams {
 pub struct DisposeTerminalParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
 }
 
 /// Iteratively resolves the session configuration schema. The client sends the
@@ -1132,6 +1220,10 @@ pub struct DisposeTerminalParams {
 pub struct ResolveSessionConfigParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Agent provider ID
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub provider: Option<String>,
@@ -1163,6 +1255,10 @@ pub struct ResolveSessionConfigResult {
 pub struct SessionConfigCompletionsParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Agent provider ID
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub provider: Option<String>,
@@ -1212,6 +1308,10 @@ pub struct SessionConfigValueItem {
 pub struct CompletionsParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// What kind of completion is being requested.
     pub kind: CompletionItemKind,
     /// The complete text of the input being completed (e.g. the full user
@@ -1279,6 +1379,10 @@ pub struct CompletionsResult {
 pub struct InvokeChangesetOperationParams {
     /// Channel URI this command targets.
     pub channel: Uri,
+    /// Optional JSON-serializable metadata associated with this request.
+    /// Receivers MUST ignore keys they do not understand.
+    #[serde(rename = "_meta", default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<JsonObject>,
     /// Matches {@link ChangesetOperation.id} from the changeset's `operations` list.
     pub operation_id: String,
     /// Target of the operation. Required iff the chosen scope is

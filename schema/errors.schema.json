@@ -4986,6 +4986,11 @@
         "channel": {
           "$ref": "#/$defs/URI",
           "description": "Channel URI this command targets."
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         }
       },
       "required": [
@@ -5046,6 +5051,11 @@
           "enum": [
             "ahp-root://"
           ]
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "protocolVersions": {
           "type": "array",
@@ -5153,6 +5163,11 @@
           "enum": [
             "ahp-root://"
           ]
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         }
       },
       "required": [
@@ -5168,6 +5183,11 @@
           "enum": [
             "ahp-root://"
           ]
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "clientId": {
           "type": "string",
@@ -5249,6 +5269,11 @@
         "channel": {
           "$ref": "#/$defs/URI",
           "description": "Channel URI this command targets."
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "delivery": {
           "$ref": "#/$defs/SubscriptionDeliveryOptions",
@@ -5339,6 +5364,11 @@
             "ahp-root://"
           ]
         },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
+        },
         "uri": {
           "type": "string",
           "description": "Content URI from a `ContentRef`"
@@ -5384,6 +5414,11 @@
           "enum": [
             "ahp-root://"
           ]
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "uri": {
           "$ref": "#/$defs/URI",
@@ -5439,6 +5474,11 @@
           "enum": [
             "ahp-root://"
           ]
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "uri": {
           "$ref": "#/$defs/URI",
@@ -5498,6 +5538,11 @@
             "ahp-root://"
           ]
         },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
+        },
         "source": {
           "$ref": "#/$defs/URI",
           "description": "Source URI to copy from"
@@ -5532,6 +5577,11 @@
             "ahp-root://"
           ]
         },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
+        },
         "uri": {
           "$ref": "#/$defs/URI",
           "description": "URI of the resource to delete"
@@ -5560,6 +5610,11 @@
           "enum": [
             "ahp-root://"
           ]
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "uri": {
           "$ref": "#/$defs/URI",
@@ -5594,6 +5649,11 @@
             "ahp-root://"
           ]
         },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
+        },
         "source": {
           "$ref": "#/$defs/URI",
           "description": "Source URI to move from"
@@ -5627,6 +5687,11 @@
           "enum": [
             "ahp-root://"
           ]
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "uri": {
           "$ref": "#/$defs/URI",
@@ -5690,6 +5755,11 @@
             "ahp-root://"
           ]
         },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
+        },
         "uri": {
           "$ref": "#/$defs/URI",
           "description": "Directory URI to create (parents created as needed)."
@@ -5714,6 +5784,11 @@
           "enum": [
             "ahp-root://"
           ]
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "resource": {
           "type": "string",
@@ -5751,6 +5826,11 @@
           "enum": [
             "ahp-root://"
           ]
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "limit": {
           "type": "number",
@@ -5794,6 +5874,11 @@
           "enum": [
             "ahp-root://"
           ]
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "provider": {
           "type": "string",
@@ -5864,6 +5949,11 @@
             "ahp-root://"
           ]
         },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
+        },
         "provider": {
           "type": "string",
           "description": "Agent provider ID"
@@ -5932,6 +6022,11 @@
           "$ref": "#/$defs/URI",
           "description": "Session URI (client-chosen, e.g. `ahp-session:/<uuid>`)"
         },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
+        },
         "provider": {
           "type": "string",
           "description": "Agent provider ID"
@@ -5972,6 +6067,11 @@
         "channel": {
           "$ref": "#/$defs/URI",
           "description": "Channel URI this command targets."
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         }
       },
       "required": [
@@ -5985,6 +6085,11 @@
         "channel": {
           "$ref": "#/$defs/URI",
           "description": "Chat URI"
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "cursor": {
           "type": "string",
@@ -6007,6 +6112,11 @@
         "channel": {
           "$ref": "#/$defs/URI",
           "description": "The chat URI the completion is being requested for."
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "kind": {
           "$ref": "#/$defs/CompletionItemKind",
@@ -6128,6 +6238,11 @@
           "$ref": "#/$defs/URI",
           "description": "Session URI containing the new chat."
         },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
+        },
         "chat": {
           "$ref": "#/$defs/URI",
           "description": "Chat URI (client-chosen, e.g. `ahp-chat:/<uuid>`)."
@@ -6160,6 +6275,11 @@
         "channel": {
           "$ref": "#/$defs/URI",
           "description": "Channel URI this command targets."
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         }
       },
       "required": [
@@ -6173,6 +6293,11 @@
         "channel": {
           "$ref": "#/$defs/URI",
           "description": "Terminal URI (client-chosen)."
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "claim": {
           "$ref": "#/$defs/TerminalClaim",
@@ -6207,6 +6332,11 @@
         "channel": {
           "$ref": "#/$defs/URI",
           "description": "Channel URI this command targets."
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         }
       },
       "required": [
@@ -6236,6 +6366,11 @@
         "channel": {
           "$ref": "#/$defs/URI",
           "description": "The expanded changeset URI."
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "operationId": {
           "type": "string",
@@ -6274,6 +6409,11 @@
           "enum": [
             "ahp-root://"
           ]
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional JSON-serializable metadata associated with this request.\nReceivers MUST ignore keys they do not understand."
         },
         "uri": {
           "$ref": "#/$defs/URI",

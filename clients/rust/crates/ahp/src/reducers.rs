@@ -277,16 +277,27 @@ fn with_status_flag(status: u32, flag: SessionStatus, set: bool) -> u32 {
     }
 }
 
+/// Whether an entry blocks on the *user*.
+///
+/// `ToolClientExecution` is work delegated to a client, not a prompt: the call
+/// has already cleared its confirmation gate and is simply running somewhere
+/// else. Counting it would report a session as awaiting the user for the
+/// entire duration of every client tool call.
+fn awaits_user(request: &SessionInputRequest) -> bool {
+    !matches!(request, SessionInputRequest::ToolClientExecution(_))
+}
+
 /// Reflects the session-level input queue into the activity bits of `status`.
-/// A non-empty queue promotes the activity to `InputNeeded`; emptying it clears
-/// the input-needed-specific bit. Since `InputNeeded` implies `InProgress`, an
-/// unblocked turn falls back to `InProgress` while an already-idle session stays
-/// idle. Orthogonal flags (`IsRead` / `IsArchived`) are preserved.
+/// A queue holding any user-blocking entry promotes the activity to
+/// `InputNeeded`; draining those entries clears the input-needed-specific bit.
+/// Since `InputNeeded` implies `InProgress`, an unblocked turn falls back to
+/// `InProgress` while an already-idle session stays idle. Orthogonal flags
+/// (`IsRead` / `IsArchived`) are preserved.
 fn with_input_needed_status(status: u32, input_needed: &[SessionInputRequest]) -> u32 {
-    if input_needed.is_empty() {
-        status & !(SessionStatus::InputNeeded.bits() & !SessionStatus::InProgress.bits())
-    } else {
+    if input_needed.iter().any(awaits_user) {
         (status & !STATUS_ACTIVITY_MASK) | SessionStatus::InputNeeded.bits()
+    } else {
+        status & !(SessionStatus::InputNeeded.bits() & !SessionStatus::InProgress.bits())
     }
 }
 

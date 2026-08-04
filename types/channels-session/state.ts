@@ -183,9 +183,12 @@ export interface SessionState extends SessionMetadata {
    * Each entry is self-sufficient: it carries the owning chat's URI plus every
    * identifier the client needs to respond. A client answers by dispatching the
    * ordinary `chat/*` action to that chat's channel — see
-   * {@link SessionInputRequest} for the per-variant response path. A present,
-   * non-empty list implies {@link SessionStatus.InputNeeded} on
-   * {@link SessionSummary.status}.
+   * {@link SessionInputRequest} for the per-variant response path. A list
+   * holding any entry other than
+   * {@link SessionInputRequestKind.ToolClientExecution} implies
+   * {@link SessionStatus.InputNeeded} on {@link SessionSummary.status};
+   * client-execution entries are work delegated to a client rather than a
+   * prompt, so they leave the session's activity unchanged.
    *
    * Host-managed: the host upserts entries with `session/inputNeededSet` as
    * chats raise requests and removes them with `session/inputNeededRemoved`
@@ -322,6 +325,11 @@ export interface SessionToolConfirmationRequest extends SessionInputRequestBase 
  * `chat/toolCallComplete` (and optionally streaming with
  * `chat/toolCallContentChanged`) to {@link SessionInputRequestBase.chat |
  * `chat`}, keyed by `turnId` and `toolCall.toolCallId`.
+ *
+ * Unlike the other variants this does **not** raise
+ * {@link SessionStatus.InputNeeded}: the call has already cleared its
+ * confirmation gate and is merely executing elsewhere, so the session stays
+ * {@link SessionStatus.InProgress} while it runs.
  *
  * @category Session Input Types
  */

@@ -27,16 +27,30 @@ private func withStatusFlag(_ status: SessionStatus, _ flag: SessionStatus, _ se
     set ? status.union(flag) : status.subtracting(flag)
 }
 
-/// Reflects the session-level input queue into the activity bits of `status`.
-/// A non-empty queue promotes the activity to `.inputNeeded`; emptying it clears
-/// the input-needed-specific bit. Since `.inputNeeded` implies `.inProgress`, an
-/// unblocked turn falls back to `.inProgress` while an already-idle session stays
-/// idle. Orthogonal flags (`.isRead` / `.isArchived`) are preserved.
-private func withInputNeededStatus(_ status: SessionStatus, _ inputNeeded: [SessionInputRequest]) -> SessionStatus {
-    if inputNeeded.isEmpty {
-        return status.subtracting(SessionStatus.inputNeeded.subtracting(.inProgress))
+/// Whether an entry blocks on the *user*.
+///
+/// `.toolClientExecution` is work delegated to a client, not a prompt: the call
+/// has already cleared its confirmation gate and is simply running somewhere
+/// else. Counting it would report a session as awaiting the user for the entire
+/// duration of every client tool call.
+private func awaitsUser(_ request: SessionInputRequest) -> Bool {
+    if case .toolClientExecution = request {
+        return false
     }
-    return status.subtracting(statusActivityMask).union(.inputNeeded)
+    return true
+}
+
+/// Reflects the session-level input queue into the activity bits of `status`.
+/// A queue holding any user-blocking entry promotes the activity to
+/// `.inputNeeded`; draining those entries clears the input-needed-specific bit.
+/// Since `.inputNeeded` implies `.inProgress`, an unblocked turn falls back to
+/// `.inProgress` while an already-idle session stays idle. Orthogonal flags
+/// (`.isRead` / `.isArchived`) are preserved.
+private func withInputNeededStatus(_ status: SessionStatus, _ inputNeeded: [SessionInputRequest]) -> SessionStatus {
+    if inputNeeded.contains(where: awaitsUser) {
+        return status.subtracting(statusActivityMask).union(.inputNeeded)
+    }
+    return status.subtracting(SessionStatus.inputNeeded.subtracting(.inProgress))
 }
 
 /// Resolves a selected confirmation option by ID from a pending-confirmation state.

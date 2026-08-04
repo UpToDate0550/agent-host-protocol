@@ -70,16 +70,30 @@ func withStatusFlag(status, flag ahptypes.SessionStatus, set bool) ahptypes.Sess
 	return status &^ flag
 }
 
+// awaitsUser reports whether an entry blocks on the *user*.
+//
+// SessionInputRequestKindToolClientExecution is work delegated to a client, not
+// a prompt: the call has already cleared its confirmation gate and is simply
+// running somewhere else. Counting it would report a session as awaiting the
+// user for the entire duration of every client tool call.
+func awaitsUser(request ahptypes.SessionInputRequest) bool {
+	_, isClientExecution := request.Value.(*ahptypes.SessionToolClientExecutionRequest)
+	return !isClientExecution
+}
+
 // withInputNeededStatus reflects the session-level input queue into the activity
-// bits of status. A non-empty queue promotes the activity to InputNeeded;
-// emptying it clears the input-needed-specific bit. Because InputNeeded implies
-// InProgress, an unblocked turn falls back to InProgress while an already-idle
-// session stays idle. Orthogonal flags (IsRead / IsArchived) are preserved.
+// bits of status. A queue holding any user-blocking entry promotes the activity
+// to InputNeeded; draining those entries clears the input-needed-specific bit.
+// Because InputNeeded implies InProgress, an unblocked turn falls back to
+// InProgress while an already-idle session stays idle. Orthogonal flags
+// (IsRead / IsArchived) are preserved.
 func withInputNeededStatus(status ahptypes.SessionStatus, inputNeeded []ahptypes.SessionInputRequest) ahptypes.SessionStatus {
-	if len(inputNeeded) == 0 {
-		return status &^ (ahptypes.SessionStatusInputNeeded &^ ahptypes.SessionStatusInProgress)
+	for _, request := range inputNeeded {
+		if awaitsUser(request) {
+			return (status &^ statusActivityMask) | ahptypes.SessionStatusInputNeeded
+		}
 	}
-	return (status &^ statusActivityMask) | ahptypes.SessionStatusInputNeeded
+	return status &^ (ahptypes.SessionStatusInputNeeded &^ ahptypes.SessionStatusInProgress)
 }
 
 // ─── Tool-call helpers ─────────────────────────────────────────────────

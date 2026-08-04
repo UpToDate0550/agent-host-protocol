@@ -97,15 +97,27 @@ private fun withStatusFlag(status: SessionStatus, flag: SessionStatus, set: Bool
     }
 
 /**
+ * Whether an entry blocks on the *user*.
+ *
+ * A client-execution entry is work delegated to a client, not a prompt: the
+ * call has already cleared its confirmation gate and is simply running
+ * somewhere else. Counting it would report a session as awaiting the user for
+ * the entire duration of every client tool call.
+ */
+private fun awaitsUser(request: SessionInputRequest): Boolean =
+    request !is SessionInputRequestToolClientExecution
+
+/**
  * Reflects the session-level [SessionState.inputNeeded] queue into the activity
- * bits of [status]. A non-empty queue promotes the activity to
- * [SessionStatus.INPUT_NEEDED]; emptying it clears the input-needed-specific
- * bit. Since INPUT_NEEDED implies [SessionStatus.IN_PROGRESS], an unblocked turn
- * falls back to IN_PROGRESS while an already-idle session stays idle. Orthogonal
- * flags (IS_READ / IS_ARCHIVED) are preserved.
+ * bits of [status]. A queue holding any user-blocking entry promotes the
+ * activity to [SessionStatus.INPUT_NEEDED]; draining those entries clears the
+ * input-needed-specific bit. Since INPUT_NEEDED implies
+ * [SessionStatus.IN_PROGRESS], an unblocked turn falls back to IN_PROGRESS
+ * while an already-idle session stays idle. Orthogonal flags (IS_READ /
+ * IS_ARCHIVED) are preserved.
  */
 private fun withInputNeededStatus(status: SessionStatus, inputNeeded: List<SessionInputRequest>): SessionStatus =
-    if (inputNeeded.isNotEmpty()) {
+    if (inputNeeded.any(::awaitsUser)) {
         SessionStatus((status.rawValue and STATUS_ACTIVITY_MASK.inv()) or SessionStatus.INPUT_NEEDED.rawValue)
     } else {
         val inputBit = SessionStatus.INPUT_NEEDED.rawValue and SessionStatus.IN_PROGRESS.rawValue.inv()

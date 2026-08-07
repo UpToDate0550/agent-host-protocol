@@ -1734,7 +1734,11 @@ data class Turn(
     /**
      * Error details if state is `'error'`
      */
-    val error: ErrorInfo? = null
+    val error: ErrorInfo? = null,
+    /**
+     * Whether this failed turn can be resumed without adding another message.
+     */
+    val resumable: Boolean? = null
 )
 
 @Serializable

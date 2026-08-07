@@ -379,6 +379,7 @@ private fun endTurn(
     turnState: TurnState,
     terminalStatus: SessionStatus? = null,
     error: ErrorInfo? = null,
+    resumable: Boolean? = null,
 ): ChatState {
     val active = state.activeTurn ?: return state
     if (active.id != turnId) return state
@@ -434,6 +435,7 @@ private fun endTurn(
         usage = active.usage,
         state = turnState,
         error = error,
+        resumable = resumable,
     )
 
     val withoutTurn = state.copy(
@@ -849,6 +851,35 @@ public fun chatReducer(state: ChatState, action: StateAction): ChatState = when 
         }
     }
 
+    is StateActionChatTurnResumed -> {
+        val a = action.value
+        val turn = state.turns.lastOrNull()
+        if (
+            state.activeTurn != null ||
+            turn == null ||
+            turn.id != a.turnId ||
+            turn.state != TurnState.ERROR ||
+            turn.resumable != true
+        ) {
+            state
+        } else {
+            val withTurn = state.copy(
+                turns = state.turns.dropLast(1),
+                activeTurn = ActiveTurn(
+                    id = turn.id,
+                    startedAt = turn.startedAt ?: state.modifiedAt,
+                    message = turn.message,
+                    responseParts = turn.responseParts,
+                    usage = turn.usage,
+                ),
+            )
+            withTurn.copy(
+                status = withStatusFlag(chatSummaryStatus(withTurn), SessionStatus.IS_READ, false),
+                modifiedAt = nowIsoString(),
+            )
+        }
+    }
+
     is StateActionChatDelta -> {
         val a = action.value
         updateResponsePart(state, a.turnId, a.partId) { part ->
@@ -879,7 +910,7 @@ public fun chatReducer(state: ChatState, action: StateAction): ChatState = when 
         endTurn(state, action.value.turnId, action.value.duration, TurnState.CANCELLED)
 
     is StateActionChatError ->
-        endTurn(state, action.value.turnId, action.value.duration, TurnState.ERROR, SessionStatus.ERROR, action.value.error)
+        endTurn(state, action.value.turnId, action.value.duration, TurnState.ERROR, SessionStatus.ERROR, action.value.error, action.value.resumable)
 
     is StateActionChatActivityChanged ->
         state.copy(activity = action.value.activity)
